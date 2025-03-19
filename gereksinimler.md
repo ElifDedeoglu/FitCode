@@ -17,5 +17,5 @@
 16. BESİN ARAMA (Elif DEDEOĞLU)
 
 # Gereksinim Dağılımları
-1. [Tuğba'nın Gereksinimleri](Tuğba_gereksinim_analizleri.md)
+1. [Tuğba'nın Gereksinimleri](tuğba_gereksinim_analizleri.md)
 2. [Elif'in Gereksinimleri](elif_gereksinim_analizleri.md)
