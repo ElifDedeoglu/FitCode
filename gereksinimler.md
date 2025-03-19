@@ -1,4 +1,4 @@
-GEREKSİNİMLER
+# Gereksinimler
 1. KAYIT OLMA (Tuğba GÜNDOĞDU)
 2. GİRİŞ YAPMA (Tuğba GÜNDOĞDU)
 3. ÇIKIŞ YAPMA (Tuğba GÜNDOĞDU)
@@ -15,3 +15,6 @@ GEREKSİNİMLER
 14. BESİN EKLEME (Elif DEDEOĞLU)
 15. BESİN DÜZENLEME (Elif DEDEOĞLU)
 16. BESİN ARAMA (Elif DEDEOĞLU)
+
+# Gereksinim Dağılımları
+[Tuğba'nın Gereksinimleri](Tuğba_gereksinim_analizleri.md)
