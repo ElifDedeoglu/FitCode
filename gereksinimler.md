@@ -18,3 +18,4 @@
 
 # Gereksinim Dağılımları
 [Tuğba'nın Gereksinimleri](Tuğba_gereksinim_analizleri.md)
+[Elif'in Gereksinimleri](elif_gereksinim_analizleri.md)
