@@ -12,5 +12,7 @@
 **Proje Ekibi:**  Elif DEDEOĞLU, Tuğba GÜNDOĞDU
 
 **1.[Gereksinimler](gereksinimler.md)**
+
 **2. [Durum Diyagramı](Durum_Diyagramı.png)**
+
 **3. [Durum Senaryoları](Elif_durum_senaryoları.pdf)**
