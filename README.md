@@ -15,4 +15,4 @@
 
 **2. [Durum Diyagramı](Durum_Diyagramı.png)**
 
-**3. [Durum Senaryoları](Elif_durum_senaryoları.pdf)** [](Tuğba_durum_senaryoları.pdf)
+**3. [Durum Senaryoları](Elif_durum_senaryoları.pdf)** [2.](Tuğba_durum_senaryoları.pdf)
