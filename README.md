@@ -5,7 +5,7 @@
 
 **Referans Uygulaması:** www.macfit.com 
 
-**Uygulama Adresi :**
+**Uygulama Adresi :** https://elif.fitcode.online
 
 **Grup Adı:** BioSisters
 
