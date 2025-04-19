@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitCode - Giriş Yap</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: url('salatakız.png') no-repeat center center fixed; /* Resmi arka planda yerleştiriyoruz */
+      background-size: 70%; /* Resmin boyutunu %70 yapıyoruz */
+      background-color: rgba(250,241,227,255); /* Sağ ve sol taraflarda boş kalan alanları bej rengi yapıyoruz */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    header {
+      text-align: center;
+      width: 100%;
+      padding: 40px 20px;
+      color: white;
+      text-shadow: 1px 1px 5px #000;
+    }
+
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 200px;
+      height: auto;
+      opacity: 0.7; /* Logo'yu %70 saydam yapıyoruz */
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .logo-container h1 {
+      font-size: 2em;
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
+      margin-top: 20px;
+    }
+
+    h2 {
+      color: #2e8b57;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #2e8b57;
+      color: white;
+      font-weight: bold;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #246b45;
+      cursor: pointer;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .link a {
+      color: #2e8b57;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <img src="logo1.jpg" alt="Logo" class="logo">
+
+  <header>
+    <div class="logo-container">
+      <h1>FitCode</h1>
+    </div>
+  </header>
+
+  <div class="container">
+    <h2>Giriş Yap</h2>
+    <form>
+      <input type="text" name="kullaniciAdi" placeholder="Kullanıcı Adı" required>
+      <input type="password" name="sifre" placeholder="Şifre" required>
+      <button type="submit">Giriş</button>
+    </form>
+    <div class="link">
+      Hesabınız yok mu? <a href="register.html">Kayıt Ol</a>
+    </div>
+  </div>
+
+  <script>
+    document.querySelector("form").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      let kullaniciAdi = document.querySelector("input[name='kullaniciAdi']").value;
+      let sifre = document.querySelector("input[name='sifre']").value;
+
+      let kullanici = JSON.parse(localStorage.getItem("kullanici"));
+
+      if (kullanici && kullanici.email === kullaniciAdi && kullanici.sifre === sifre) {
+        alert("Giriş başarılı!");
+        window.location.href = "dashboard.html";
+      } else {
+        alert("Geçersiz kullanıcı adı veya şifre.");
+      }
+    });
+  </script>
+</body>
+</html>
