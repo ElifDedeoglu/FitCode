@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitCode</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: rgba(250,241,227,255); /* En arka katman için şeffaf beyaz renk */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      background-image: url('arkaplan.jpg'); /* Arka plan resmi */
+      background-size: 85% auto; /* Arka plan boyutu %85 olarak ayarlandı */
+      background-position: center;
+      background-attachment: fixed; /* Arka planın sabit olmasını sağlar */
+      background-repeat: no-repeat;
+    }
+
+    .overlay {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      width: 100%;
+      padding: 60px; /* Daha büyük başlık için padding artırıldı */
+      color: white;
+      font-size: 4em; /* Başlık font büyüklüğü artırıldı */
+      font-weight: bold;
+      text-shadow: 2px 2px 10px #000; /* Başlık daha belirgin */
+    }
+
+    /* Logo stili */
+    .logo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200px; /* Başlangıç boyutu */
+      height: auto;
+      opacity: 0.7; /* Saydamlık %70 */
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .sidebar {
+      width: 25%;
+      padding: 20px;
+      background-color: #ffffffdd;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    .main-content {
+      width: 70%;
+      padding: 20px;
+      background-color: #ffffffdd;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    h2 {
+      color: #2e8b57;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      background-color: #2e8b57;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #246b45;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .link a {
+      color: #2e8b57;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+
+    .card {
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
+
+    .card h3 {
+      color: #2e8b57;
+    }
+
+    .card p {
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Logo ekleniyor -->
+  <img src="logo1.jpg" alt="Logo" class="logo">
+
+  <div class="overlay">
+    <header>FitCode</header>
+
+    <div class="container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <h3>Hoşgeldiniz, <span id="user-name"></span></h3>
+        <button onclick="window.location.href='profile.html'">Profil Bilgileri</button>
+        <button onclick="window.location.href='articles.html'">Popüler Makaleler</button>
+        <button onclick="window.location.href='water-tracking.html'">Su Takibi</button>
+        <button onclick="window.location.href='reports.html'">Günlük/Haftalık Raporlar</button>
+        <button onclick="window.location.href='logout.html'">Çıkış Yap</button>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="card">
+          <h3>Günlük Kalori Hedefiniz</h3>
+          <p id="calorie-goal">Loading...</p>
+        </div>
+
+        <div class="card">
+          <h3>Son Eklenen Makale</h3>
+          <p><a href="https://bilimgenc.tubitak.gov.tr/makale/saglikli-bir-beslenme-icin-farkinda-olarak-yemek-yiyin" target="_blank" style="color: #2e8b57; text-decoration: none;">Sağlıklı Bir Beslenme İçin Farkında Olarak Yemek Yiyin</a></p>
+        </div>
+
+        <div class="card">
+          <h3>Besin Arama</h3>
+          <input type="text" placeholder="Besin adı arayın..." id="food-search">
+          <button onclick="searchFood()">Besin Ara</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Giriş yapan kullanıcının verilerini çekme ve kullanıcı adını göstermek
+    document.addEventListener('DOMContentLoaded', function() {
+      let kullanici = JSON.parse(localStorage.getItem("kullanici"));
+      if (kullanici) {
+        document.getElementById('user-name').textContent = kullanici.email.split('@')[0]; // E-posta adresinden kullanıcı adını al
+        document.getElementById('calorie-goal').textContent = `Günlük kalori hedefiniz: ${kullanici.calorieGoal} kcal`;
+      }
+    });
+
+    // Besin arama fonksiyonu (şu an için sadece placeholder)
+    function searchFood() {
+      let foodQuery = document.getElementById('food-search').value;
+      alert(`Aradığınız besin: ${foodQuery}`);
+    }
+  </script>
+</body>
+</html>
