@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FitCode - Profil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #d0f0c0, #f4fdf4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      background-image: url('https://images.unsplash.com/photo-1606813902914-476de7c3c5de');
+      background-size: cover;
+      background-position: center;
+      width: 100%;
+      padding: 40px;
+      color: white;
+      font-size: 2em;
+      font-weight: bold;
+      text-shadow: 1px 1px 5px #000;
+      position: relative;
+    }
+
+    header img {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 200px;
+      height: auto;
+    }
+
+    .container {
+      background-color: #ffffffdd;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 500px;
+      margin-top: 20px;
+    }
+
+    h2 {
+      color: #2e8b57;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    input,
+    button,
+    select {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #2e8b57;
+      color: white;
+      font-weight: bold;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #246b45;
+      cursor: pointer;
+    }
+
+    .info {
+      margin: 10px 0;
+      font-size: 18px;
+      color: #555;
+      position: relative;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .link a {
+      color: #2e8b57;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+
+    #profileImage {
+      display: block;
+      margin: 0 auto 10px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      background-color: #f5f5f5;
+      border: 2px solid #e0e0e0;
+    }
+
+    #calorieResult {
+      text-align: center;
+      color: #333;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    /* Fotoğraf ekleme butonu */
+    #uploadButton {
+      position: absolute;
+      bottom: 0;
+      right: calc(50% - 50px);
+      background: #2e8b57 url('https://img.icons8.com/ios-filled/50/ffffff/camera.png') no-repeat center center;
+      background-size: 20px 20px;
+      width: 30px;
+      height: 30px;
+      border: none;
+      cursor: pointer;
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    #fileInput {
+      display: none;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .button-group button {
+      flex: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <img src="logo1.jpg" alt="FitCode Logo">
+    FitCode - Profil
+  </header>
+
+  <div class="container">
+    <h2>Profil Bilgileriniz</h2>
+    <form id="profileForm">
+      <div class="info">
+        <img id="profileImage" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='40' r='30' fill='%23f5f5f5'/><circle cx='50' cy='40' r='25' fill='%23e0e0e0'/></svg>" alt="Profil Fotoğrafı">
+        <button type="button" id="uploadButton" onclick="document.getElementById('fileInput').click();"></button>
+      </div>
+
+      <input type="file" id="fileInput" onchange="previewImage(event)">
+
+      <div class="info">
+        <label for="name">Ad Soyad:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div class="info">
+        <label for="email">E-posta:</label>
+        <input type="email" id="email" name="email" required disabled>
+      </div>
+      <div class="info">
+        <label for="age">Yaş:</label>
+        <input type="number" id="age" name="age" required>
+      </div>
+      <div class="info">
+        <label for="weight">Kilo (kg):</label>
+        <input type="number" id="weight" name="weight" required>
+      </div>
+      <div class="info">
+        <label for="height">Boy (cm):</label>
+        <input type="number" id="height" name="height" required>
+      </div>
+      <div class="info">
+        <label for="gender">Cinsiyet:</label>
+        <select id="gender" name="gender" required>
+          <option value="">Seçiniz</option>
+          <option value="male">Erkek</option>
+          <option value="female">Kadın</option>
+        </select>
+      </div>
+      <div class="info">
+        <label for="goal">Hedefiniz:</label>
+        <select id="goal" name="goal" required>
+          <option value="">Seçiniz</option>
+          <option value="lose">Kilo Vermek</option>
+          <option value="gain">Kilo Almak</option>
+          <option value="maintain">Kilo Koruma</option>
+          <option value="muscle">Kas Alımı</option>
+        </select>
+      </div>
+      <div class="info">
+        <label for="bmi">Vücut Kitle İndeksi (BMI):</label>
+        <input type="text" id="bmi" name="bmi" disabled>
+      </div>
+      <div id="calorieResult">Almanız gereken kalori: -</div>
+
+      <div class="button-group">
+        <button type="button" onclick="calculateEverything()">Hesapla</button>
+        <button type="button" onclick="updateProfile()">Güncelle</button>
+      </div>
+    </form>
+
+    <div class="link">
+      <a href="dashboard.html">Geri Dön</a>
+    </div>
+  </div>
+
+  <script>
+    // Sayfa yüklendiğinde kayıtlı bilgileri yükle
+    window.onload = function() {
+      if(localStorage.getItem('name')) {
+        document.getElementById('name').value = localStorage.getItem('name');
+      }
+      if(localStorage.getItem('age')) {
+        document.getElementById('age').value = localStorage.getItem('age');
+      }
+      if(localStorage.getItem('weight')) {
+        document.getElementById('weight').value = localStorage.getItem('weight');
+      }
+      if(localStorage.getItem('height')) {
+        document.getElementById('height').value = localStorage.getItem('height');
+      }
+      if(localStorage.getItem('gender')) {
+        document.getElementById('gender').value = localStorage.getItem('gender');
+      }
+      if(localStorage.getItem('goal')) {
+        document.getElementById('goal').value = localStorage.getItem('goal');
+      }
+      if(localStorage.getItem('bmi')) {
+        document.getElementById('bmi').value = localStorage.getItem('bmi');
+      }
+      if(localStorage.getItem('calories')) {
+        document.getElementById('calorieResult').innerText = "Almanız gereken kalori: " + 
+          Math.round(localStorage.getItem('calories')) + " kcal";
+      }
+      if(localStorage.getItem('profileImage')) {
+        document.getElementById('profileImage').src = localStorage.getItem('profileImage');
+      }
+    };
+
+    function calculateEverything() {
+      var name = document.getElementById('name').value;
+      var age = parseInt(document.getElementById('age').value);
+      var weight = parseFloat(document.getElementById('weight').value);
+      var height = parseFloat(document.getElementById('height').value);
+      var gender = document.getElementById('gender').value;
+      var goal = document.getElementById('goal').value;
+
+      if (!name || !age || !weight || !height || !gender || !goal) {
+        alert("Lütfen tüm bilgileri doldurun.");
+        return;
+      }
+
+      // BMI Hesapla
+      var bmi = calculateBMI(weight, height);
+      document.getElementById('bmi').value = bmi;
+      localStorage.setItem('bmi', bmi);
+
+      // Kalori Hesapla (Harris-Benedict)
+      let bmr = 0;
+      if (gender === "male") {
+        bmr = 66 + (13.7 * weight) + (5 * height) - (6.8 * age);
+      } else {
+        bmr = 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age);
+      }
+
+      let calorie = bmr;
+      if (goal === "lose") calorie -= 500;  // Kilo vermek için 500 kcal azalt
+      else if (goal === "gain") calorie += 500;  // Kilo almak için 500 kcal artır
+      else if (goal === "muscle") calorie += 300;  // Kas alımı için 300 kcal artır
+      // Kilo koruma için değişiklik yapma
+
+      document.getElementById('calorieResult').innerText = "Almanız gereken kalori: " + Math.round(calorie) + " kcal";
+
+      localStorage.setItem('calories', calorie);
+    }
+
+    function updateProfile() {
+      var name = document.getElementById('name').value;
+      var age = parseInt(document.getElementById('age').value);
+      var weight = parseFloat(document.getElementById('weight').value);
+      var height = parseFloat(document.getElementById('height').value);
+      var gender = document.getElementById('gender').value;
+      var goal = document.getElementById('goal').value;
+
+      if (!name || !age || !weight || !height || !gender || !goal) {
+        alert("Lütfen tüm bilgileri doldurun.");
+        return;
+      }
+
+      // Tüm bilgileri localStorage'a kaydet
+      localStorage.setItem('name', name);
+      localStorage.setItem('age', age);
+      localStorage.setItem('weight', weight);
+      localStorage.setItem('height', height);
+      localStorage.setItem('gender', gender);
+      localStorage.setItem('goal', goal);
+      
+      // Profil fotoğrafını da kaydet (eğer yüklendiyse)
+      var profileImage = document.getElementById('profileImage').src;
+      if(profileImage && !profileImage.includes('data:image/svg+xml')) {
+        localStorage.setItem('profileImage', profileImage);
+      }
+
+      alert("Profil bilgileriniz başarıyla güncellendi!");
+    }
+
+    function calculateBMI(weight, height) {
+      height = height / 100;
+      return (weight / (height * height)).toFixed(1);
+    }
+
+    function previewImage(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById('profileImage').src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+  </script>
+</body>
+
+</html>
