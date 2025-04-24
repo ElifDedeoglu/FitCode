@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitCode - Makaleler</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #2e8b57;
+        }
+
+        .add-article-btn {
+            padding: 10px 20px;
+            background: #2e8b57;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .article-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .article-content {
+            padding: 20px;
+        }
+
+        .article-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .article-excerpt {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #888;
+            font-size: 12px;
+        }
+
+        .admin-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .edit-btn {
+            background: #2e8b57;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #d9534f;
+            color: white;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Makaleler</h1>
+            <button id="addArticleBtn" class="add-article-btn hidden">Yeni Makale Ekle</button>
+        </div>
+
+        <div class="articles-grid" id="articlesGrid">
+            <!-- Makaleler buraya yüklenecek -->
+        </div>
+    </div>
+
+    <script>
+        // Sayfa yüklendiğinde çalışacak fonksiyon
+        document.addEventListener('DOMContentLoaded', function () {
+            // Admin kontrolü
+            const isAdmin = localStorage.getItem('adminLoggedIn') === "true";
+            if (isAdmin) {
+                document.getElementById('addArticleBtn').classList.remove('hidden');
+            }
+
+            // Makaleleri yükle
+            loadArticles();
+        });
+
+        // Makaleleri yükleme fonksiyonu
+        function loadArticles() {
+            const articles = JSON.parse(localStorage.getItem('articles')) || [];
+            const articlesGrid = document.getElementById('articlesGrid');
+            const isAdmin = localStorage.getItem('adminLoggedIn') === "true";
+
+            articlesGrid.innerHTML = '';
+
+            if (articles.length === 0) {
+                articlesGrid.innerHTML = '<p>Henüz makale bulunmamaktadır.</p>';
+                return;
+            }
+
+            articles.forEach(article => {
+                const articleCard = document.createElement('div');
+                articleCard.className = 'article-card';
+                articleCard.innerHTML = `
+          <img src="${article.image || 'default-article.jpg'}" alt="${article.title}" class="article-image">
+          <div class="article-content">
+            <h3 class="article-title">${article.title}</h3>
+            <p class="article-excerpt">${article.content.substring(0, 100)}...</p>
+            <div class="article-meta">
+              <span>${article.category}</span>
+              <span>${article.date}</span>
+            </div>
+            ${isAdmin ? `
+              <div class="admin-actions">
+                <button class="edit-btn" onclick="editArticle('${article.id}')">Düzenle</button>
+                <button class="delete-btn" onclick="deleteArticle('${article.id}')">Sil</button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+                articlesGrid.appendChild(articleCard);
+            });
+        }
+
+        // Yeni makale butonu
+        document.getElementById('addArticleBtn').addEventListener('click', function () {
+            window.location.href = 'admin-add-article.html';
+        });
+
+        // Makale düzenleme fonksiyonu
+        function editArticle(id) {
+            window.location.href = `admin-edit-article.html?id=${id}`;
+        }
+
+        // Makale silme fonksiyonu
+        function deleteArticle(id) {
+            if (confirm('Bu makaleyi silmek istediğinize emin misiniz?')) {
+                let articles = JSON.parse(localStorage.getItem('articles')) || [];
+                articles = articles.filter(article => article.id !== id);
+                localStorage.setItem('articles', JSON.stringify(articles));
+                loadArticles();
+            }
+        }
+    </script>
+</body>
+
+</html>

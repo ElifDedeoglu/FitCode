@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitCode</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: rgba(250, 241, 227, 255);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      background-image: url('arkaplan.jpg');
+      background-size: 85% auto;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+    }
+
+    .overlay {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      width: 100%;
+      padding: 60px;
+      color: white;
+      font-size: 4em;
+      font-weight: bold;
+      text-shadow: 2px 2px 10px #000;
+    }
+
+    .logo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200px;
+      height: auto;
+      opacity: 0.7;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .sidebar {
+      width: 25%;
+      padding: 20px;
+      background-color: #ffffffdd;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      position: relative;
+    }
+
+    .main-content {
+      width: 70%;
+      padding: 20px;
+      background-color: #ffffffdd;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    h2,
+    h3 {
+      color: #2e8b57;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      background-color: #2e8b57;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      background-color: #246b45;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .link a {
+      color: #2e8b57;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+
+    .card {
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
+
+    .admin-section {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 2px dashed #2e8b57;
+    }
+
+    .admin-button {
+      background-color: #d9534f;
+    }
+
+    .admin-button:hover {
+      background-color: #c9302c;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .admin-login-form {
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .admin-login-form input {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        font-size: 2.5em;
+        padding: 40px 20px;
+      }
+
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .sidebar,
+      .main-content {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      .logo {
+        width: 150px;
+      }
+
+      .card {
+        padding: 15px;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      input[type="password"] {
+        width: 100%;
+        font-size: 16px;
+      }
+
+      button {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <img src="logo1.jpg" alt="Logo" class="logo">
+
+  <div class="overlay">
+    <header>FitCode</header>
+
+    <div class="container">
+      <div class="sidebar">
+        <h3>Hoşgeldiniz, <span id="user-name"></span></h3>
+        <button onclick="window.location.href='profile.html'">Profil Bilgileri</button>
+        <button onclick="window.location.href='articles.html'">Popüler Makaleler</button>
+        <button onclick="window.location.href='water-tracking.html'">Su Takibi</button>
+        <button onclick="window.location.href='reports.html'">Günlük/Haftalık Raporlar</button>
+        <button id="adminLoginBtn" onclick="showAdminLogin()">Admin Girişi</button>
+
+        <div id="adminLoginForm" class="admin-login-form hidden">
+          <h3>Yönetici Girişi</h3>
+          <input type="text" id="adminUsername" placeholder="Kullanıcı Adı">
+          <input type="password" id="adminPassword" placeholder="Şifre">
+          <button onclick="checkAdminCredentials()">Giriş Yap</button>
+        </div>
+
+        <div id="adminPanel" class="admin-section hidden">
+          <h3>Admin Paneli</h3>
+          <button class="admin-button" onclick="window.location.href='admin-add-article.html'">Makale Ekle</button>
+          <button class="admin-button" onclick="window.location.href='admin-edit-article.html'">Makale Düzenle</button>
+          <button onclick="logoutAdmin()">Admin Çıkışı</button>
+        </div>
+
+        <button onclick="window.location.href='logout.html'">Çıkış Yap</button>
+      </div>
+
+      <div class="main-content">
+        <div class="card">
+          <h3>Günlük Kalori Hedefiniz</h3>
+          <p id="calorie-goal">Loading...</p>
+        </div>
+
+        <div class="card">
+          <h3>Son Eklenen Makale</h3>
+          <p><a href="https://bilimgenc.tubitak.gov.tr/makale/saglikli-bir-beslenme-icin-farkinda-olarak-yemek-yiyin"
+              target="_blank" style="color: #2e8b57; text-decoration: none;">Sağlıklı Bir Beslenme İçin Farkında Olarak
+              Yemek Yiyin</a></p>
+        </div>
+
+        <div class="card">
+          <h3>Besin Arama</h3>
+          <input type="text" placeholder="Besin adı arayın..." id="food-search">
+          <button onclick="searchFood()">Besin Ara</button>
+        </div>
+
+        <div class="card" id="food-panel" style="display: none;">
+          <h3>Besin Bilgileri</h3>
+          <p id="food-result"></p>
+          <input type="text" id="foodName" placeholder="Besin Adı">
+          <input type="number" id="calorieValue" placeholder="Kalori (kcal)">
+          <button onclick="saveFood()">Kaydet / Güncelle</button>
+          <button onclick="deleteFood()" style="background-color:#d9534f;">Sil</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Besin veritabanını başlatma fonksiyonu
+    function initializeFoodDatabase() {
+        // Eğer localStorage'de besin verisi yoksa, örnek verileri yükle
+        if (!localStorage.getItem("foods")) {
+            const foodDatabase = {
+                "elma": { calories: 52 },
+                "muz": { calories: 89 },
+                "portakal": { calories: 47 },
+                "üzüm": { calories: 69 },
+                "çilek": { calories: 32 },
+                "karpuz": { calories: 30 },
+                "kavun": { calories: 34 },
+                "şeftali": { calories: 39 },
+                "armut": { calories: 57 },
+                "kiraz": { calories: 50 },
+                "vişne": { calories: 50 },
+                "kayısı": { calories: 48 },
+                "incir": { calories: 74 },
+                "nar": { calories: 83 },
+                "ananas": { calories: 50 },
+                "avokado": { calories: 160 },
+                "mango": { calories: 60 },
+                "mandalina": { calories: 53 },
+                "greyfurt": { calories: 42 },
+                "limon": { calories: 29 },
+                "havuç": { calories: 41 },
+                "domates": { calories: 18 },
+                "salatalık": { calories: 16 },
+                "patates": { calories: 77 },
+                "patates haşlama": { calories: 86 },
+                "patates kızartma": { calories: 312 },
+                "soğan": { calories: 40 },
+                "sarımsak": { calories: 149 },
+                "marul": { calories: 15 },
+                "ıspanak": { calories: 23 },
+                "brokoli": { calories: 34 },
+                "karnabahar": { calories: 25 },
+                "kabak": { calories: 17 },
+                "patlıcan": { calories: 25 },
+                "biber": { calories: 20 },
+                "bezelye": { calories: 81 },
+                "fasulye": { calories: 31 },
+                "barbunya": { calories: 127 },
+                "mercimek": { calories: 116 },
+                "nohut": { calories: 164 },
+                "bulgur": { calories: 342 },
+                "pirinç": { calories: 130 },
+                "pirinç pilavı": { calories: 205 },
+                "makarna": { calories: 131 },
+                "makarna haşlama": { calories: 158 },
+                "mantı": { calories: 220 },
+                "ekmek": { calories: 265 },
+                "tam buğday ekmeği": { calories: 247 },
+                "simit": { calories: 275 },
+                "poğaça": { calories: 360 },
+                "börek": { calories: 330 },
+                "su böreği": { calories: 290 },
+                "pide": { calories: 265 },
+                "lahmacun": { calories: 330 },
+                "pizza": { calories: 266 },
+                "hamburger": { calories: 295 },
+                "tavuk döner": { calories: 220 },
+                "et döner": { calories: 280 },
+                "köfte": { calories: 250 },
+                "tavuk şiş": { calories: 180 },
+                "tavuk kanat": { calories: 290 },
+                "tavuk göğüs": { calories: 165 },
+                "tavuk but": { calories: 209 },
+                "balık": { calories: 206 },
+                "somon": { calories: 208 },
+                "ton balığı": { calories: 132 },
+                "karides": { calories: 99 },
+                "midye": { calories: 172 },
+                "kalamar": { calories: 175 },
+                "yumurta": { calories: 143 },
+                "haşlanmış yumurta": { calories: 155 },
+                "omlet": { calories: 154 },
+                "menemen": { calories: 180 },
+                "peynir": { calories: 402 },
+                "beyaz peynir": { calories: 264 },
+                "kaşar peyniri": { calories: 337 },
+                "lor peyniri": { calories: 85 },
+                "yoğurt": { calories: 59 },
+                "süt": { calories: 42 },
+                "ayran": { calories: 37 },
+                "kefir": { calories: 41 },
+                "dondurma": { calories: 207 },
+                "kaymak": { calories: 793 },
+                "tereyağı": { calories: 717 },
+                "zeytinyağı": { calories: 884 },
+                "ayçiçek yağı": { calories: 884 },
+                "bal": { calories: 304 },
+                "pekmez": { calories: 290 },
+                "reçel": { calories: 278 },
+                "fındık": { calories: 628 },
+                "ceviz": { calories: 654 },
+                "badem": { calories: 579 },
+                "antep fıstığı": { calories: 562 },
+                "kaju": { calories: 553 },
+                "çekirdek": { calories: 584 },
+                "leblebi": { calories: 477 },
+                "bisküvi": { calories: 502 },
+                "çikolata": { calories: 546 },
+                "sütlü çikolata": { calories: 535 },
+                "bitter çikolata": { calories: 598 },
+                "gofret": { calories: 520 },
+                "kek": { calories: 350 },
+                "pasta": { calories: 350 },
+                "baklava": { calories: 425 },
+                "kadayıf": { calories: 330 },
+                "lokum": { calories: 350 },
+                "helva": { calories: 522 },
+                "sütlaç": { calories: 140 },
+                "kazandibi": { calories: 150 },
+                "tavukgöğsü": { calories: 145 },
+                "muhallebi": { calories: 120 },
+                "kola": { calories: 42 },
+                "meyve suyu": { calories: 45 },
+                "limonata": { calories: 40 },
+                "çay": { calories: 1 },
+                "kahve": { calories: 2 },
+                "sade kahve": { calories: 0 },
+                "latte": { calories: 110 },
+                "cappuccino": { calories: 120 },
+                "nescafe": { calories: 70 },
+                "türk kahvesi": { calories: 7 },
+                "salep": { calories: 150 },
+                "boza": { calories: 200 },
+                "bira": { calories: 43 },
+                "şarap": { calories: 83 },
+                "rakı": { calories: 110 },
+                "vodka": { calories: 231 },
+                "viski": { calories: 250 },
+                "su": { calories: 0 },
+                "maden suyu": { calories: 0 },
+                "tonik": { calories: 34 },
+                "enerji içeceği": { calories: 45 },
+                "kuru fasulye": { calories: 140 },
+                "nohut yemeği": { calories: 168 },
+                "mercimek çorbası": { calories: 90 },
+                "ezogelin çorbası": { calories: 95 },
+                "tarhana çorbası": { calories: 85 },
+                "işkembe çorbası": { calories: 110 },
+                "tavuk çorbası": { calories: 75 },
+                "balık çorbası": { calories: 80 },
+                "sebze çorbası": { calories: 70 },
+                "domates çorbası": { calories: 65 },
+                "mantar çorbası": { calories: 85 },
+                "yoğurt çorbası": { calories: 90 },
+                "pilav üstü kuru": { calories: 350 },
+                "etli nohut": { calories: 220 },
+                "karnıyarık": { calories: 280 },
+                "imam bayıldı": { calories: 180 },
+                "patlıcan musakka": { calories: 200 },
+                "kabak mücver": { calories: 150 },
+                "ıspanak yemeği": { calories: 120 },
+                "pırasa yemeği": { calories: 110 },
+                "taze fasulye": { calories: 90 },
+                "bamya": { calories: 95 },
+                "zeytinyağlı dolma": { calories: 130 },
+                "etli dolma": { calories: 180 },
+                "sarma": { calories: 160 },
+                "mantı": { calories: 220 },
+                "iskender": { calories: 450 },
+                "adana kebap": { calories: 380 },
+                "urfa kebap": { calories: 370 },
+                "çiğ köfte": { calories: 180 },
+                "lahmacun": { calories: 330 },
+                "pide": { calories: 265 },
+                "gözleme": { calories: 200 },
+                "mantı": { calories: 220 },
+                "menemen": { calories: 180 },
+                "sucuklu yumurta": { calories: 250 },
+                "pastırma": { calories: 250 },
+                "sucuk": { calories: 452 },
+                "salam": { calories: 340 },
+                "sosis": { calories: 296 },
+                "kavurma": { calories: 550 },
+                "kokoreç": { calories: 330 },
+                "midye dolma": { calories: 200 },
+                "balık ekmek": { calories: 350 },
+                "kumpir": { calories: 450 },
+                "tost": { calories: 300 },
+                "sandviç": { calories: 280 },
+                "suşi": { calories: 200 },
+                "ramen": { calories: 400 },
+                "noodle": { calories: 190 },
+                "waffle": { calories: 310 },
+                "pankek": { calories: 227 },
+                "granola": { calories: 471 },
+                "müsli": { calories: 340 },
+                "corn flakes": { calories: 357 },
+                "yulaf ezmesi": { calories: 389 },
+                "chia tohumu": { calories: 486 },
+                "keten tohumu": { calories: 534 },
+                "kinoa": { calories: 120 },
+                "bulgur pilavı": { calories: 220 },
+                "pirinç pilavı": { calories: 205 },
+                "erişte": { calories: 360 },
+                "şehriye çorbası": { calories: 85 }
+            };
+
+            localStorage.setItem("foods", JSON.stringify(foodDatabase));
+        }
+    }
+
+    // Sayfa yüklendiğinde besin veritabanını başlat
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeFoodDatabase();
+        
+        let kullanici = JSON.parse(localStorage.getItem("kullanici"));
+        if (kullanici) {
+            document.getElementById('user-name').textContent = kullanici.email.split('@')[0];
+            document.getElementById('calorie-goal').textContent = `Günlük kalori hedefiniz: ${kullanici.calorieGoal} kcal`;
+
+            if (localStorage.getItem("adminLoggedIn") === "true") {
+                document.getElementById('adminLoginBtn').classList.add('hidden');
+                document.getElementById('adminPanel').classList.remove('hidden');
+            }
+        }
+    });
+
+    function showAdminLogin() {
+        document.getElementById('adminLoginForm').classList.toggle('hidden');
+    }
+
+    function checkAdminCredentials() {
+        const username = document.getElementById('adminUsername').value;
+        const password = document.getElementById('adminPassword').value;
+
+        if (username === "admin" && password === "123456") {
+            localStorage.setItem("adminLoggedIn", "true");
+            document.getElementById('adminLoginForm').classList.add('hidden');
+            document.getElementById('adminLoginBtn').classList.add('hidden');
+            document.getElementById('adminPanel').classList.remove('hidden');
+            alert("Admin paneline hoşgeldiniz!");
+        } else {
+            alert("Hatalı kullanıcı adı veya şifre!");
+        }
+    }
+
+    function logoutAdmin() {
+        localStorage.removeItem("adminLoggedIn");
+        document.getElementById('adminPanel').classList.add('hidden');
+        document.getElementById('adminLoginBtn').classList.remove('hidden');
+        alert("Admin oturumu sonlandırıldı.");
+    }
+
+    function searchFood() {
+        let foodQuery = document.getElementById('food-search').value.trim().toLowerCase();
+        let foodData = JSON.parse(localStorage.getItem("foods")) || {};
+        let foodInfo = foodData[foodQuery];
+
+        document.getElementById('food-panel').style.display = 'block';
+
+        if (foodInfo) {
+            document.getElementById('food-result').textContent = `"${foodQuery}" için kalori bilgisi: ${foodInfo.calories} kcal`;
+            document.getElementById('foodName').value = foodQuery;
+            document.getElementById('calorieValue').value = foodInfo.calories;
+        } else {
+            document.getElementById('food-result').textContent = `"${foodQuery}" kaydı bulunamadı. Yeni besin ekleyebilirsiniz.`;
+            document.getElementById('foodName').value = foodQuery;
+            document.getElementById('calorieValue').value = '';
+        }
+    }
+
+    function saveFood() {
+        let name = document.getElementById('foodName').value.trim().toLowerCase();
+        let calories = document.getElementById('calorieValue').value;
+
+        if (name && calories) {
+            let foodData = JSON.parse(localStorage.getItem("foods")) || {};
+            foodData[name] = { calories: calories };
+            localStorage.setItem("foods", JSON.stringify(foodData));
+            alert(`"${name}" başarıyla kaydedildi!`);
+            document.getElementById('food-result').textContent = `"${name}" için güncel bilgi: ${calories} kcal`;
+        } else {
+            alert("Lütfen tüm alanları doldurun.");
+        }
+    }
+
+    function deleteFood() {
+        let name = document.getElementById('foodName').value.trim().toLowerCase();
+
+        if (!name) {
+            alert("Silmek istediğiniz besin adını giriniz.");
+            return;
+        }
+
+        let foodData = JSON.parse(localStorage.getItem("foods")) || {};
+
+        if (foodData[name]) {
+            if (confirm(`"${name}" besinini silmek istediğinize emin misiniz?`)) {
+                delete foodData[name];
+                localStorage.setItem("foods", JSON.stringify(foodData));
+                alert(`"${name}" başarıyla silindi!`);
+                document.getElementById('food-result').textContent = `"${name}" kaydı silindi.`;
+                document.getElementById('foodName').value = '';
+                document.getElementById('calorieValue').value = '';
+            }
+        } else {
+            alert(`"${name}" kaydı bulunamadı.`);
+        }
+    }
+</script>
+   
+      
+    
+  
+</body>
+
+</html>
