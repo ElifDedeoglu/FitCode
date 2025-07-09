@@ -11,18 +11,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Repositories çekiliyor
+    - name: Reposityory çekiliyor
       uses: actions/checkout@v3
 
     - name: Node.js kuruluyor
       uses: actions/setup-node@v3
       with:
-        node-version: '18'
+        node-version: 18
 
     - name: Paketler yükleniyor
       run: npm install
-      working-directory: fitcode-backend
 
-    - name: Versiyon testi
-      run: node --version
-      working-directory: fitcode-backend
+    - name: Test çalýþtýrýlýyor
+      run: npm test
