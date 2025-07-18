@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FitCode - Kayıt Ol</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #d0f0c0, #f4fdf4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            background-image: url('https://images.unsplash.com/photo-1606813902914-476de7c3c5de');
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            padding: 40px;
+            color: white;
+            font-size: 2em;
+            font-weight: bold;
+            text-shadow: 1px 1px 5px #000;
+        }
+
+        .container {
+            background-color: #ffffffdd;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            margin-top: 20px;
+        }
+
+        h2 {
+            color: #2e8b57;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        input,
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #2e8b57;
+            color: white;
+            font-weight: bold;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+            button:hover {
+                background-color: #246b45;
+                cursor: pointer;
+            }
+
+        .link {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+            .link a {
+                color: #2e8b57;
+                text-decoration: none;
+            }
+
+                .link a:hover {
+                    text-decoration: underline;
+                }
+    </style>
+</head>
+<body>
+    <header>FitCode</header>
+
+    <div class="container">
+        <h2>Kayıt Ol</h2>
+        <form id="registerForm">
+            <input type="text" name="ad" placeholder="Adınız" required />
+            <input type="text" name="soyad" placeholder="Soyadınız" required />
+            <input type="email" name="email" placeholder="E-posta" required />
+            <input type="password" name="sifre" placeholder="Şifre" required />
+            <input type="password" name="sifreTekrar" placeholder="Şifreyi Tekrar Girin" required />
+            <button type="submit">Kayıt Ol</button>
+        </form>
+        <div class="link">
+            Zaten bir hesabınız var mı? <a href="index.html">Giriş Yap</a>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector("form").addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            // Input değerlerini al
+            const ad = document.querySelector("input[name='ad']").value;
+            const email = document.querySelector("input[name='email']").value;
+            const sifre = document.querySelector("input[name='sifre']").value;
+            const sifreTekrar = document.querySelector("input[name='sifreTekrar']").value;
+
+            if (sifre !== sifreTekrar) {
+                alert("Şifreler uyuşmuyor!");
+                return;
+            }
+
+            // Backend'in beklediği format
+            const yeniKullanici = {
+                username: ad, // name yerine username gönderiyoruz
+                email: email,
+                password: sifre
+            };
+
+            try {
+                console.log("Gönderilen veri:", yeniKullanici); // DEBUG
+
+                const response = await fetch("http://localhost:5000/api/auth/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(yeniKullanici)
+                });
+
+                const data = await response.json();
+                console.log("Backend yanıtı:", data); // DEBUG
+
+                if (response.ok) {
+                    localStorage.setItem("token", data.token); // Token'ı sakla
+                    alert("Kayıt başarılı! Yönlendiriliyorsunuz...");
+                    window.location.href = "dashboard.html";
+                } else {
+                    alert(`Kayıt başarısız: ${data.mesaj || data.message}`);
+                }
+            } catch (error) {
+                console.error("Hata:", error);
+                alert(`Sunucu hatası: ${error.message}`);
+            }
+        });
+    </script>
+
+</body>
+</html>

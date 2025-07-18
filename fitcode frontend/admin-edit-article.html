@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>FitCode - Makale Düzenle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2e8b57;
+            margin-bottom: 30px;
+        }
+
+        .article-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .article-card h3 {
+            margin-bottom: 10px;
+            color: #2e8b57;
+        }
+
+        .article-card p {
+            color: #333;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .button-group button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            background-color: #2e8b57;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #d9534f;
+            color: white;
+        }
+
+        #articlesContainer {
+            max-width: 900px;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Tüm Makaleleri Düzenle</h1>
+    <div id="articlesContainer">Yükleniyor...</div>
+
+    <script>
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            alert("Bu sayfayı görüntülemek için giriş yapmanız gerekiyor.");
+            window.location.href = "login.html";
+        }
+
+        async function fetchAllArticles() {
+            const container = document.getElementById("articlesContainer");
+
+            try {
+                const response = await fetch("http://localhost:5000/api/articles/", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Makaleler alınamadı.");
+                }
+
+                const articles = await response.json();
+                renderArticles(articles);
+            } catch (error) {
+                container.innerHTML = `<p style="color:red;">${error.message}</p>`;
+            }
+        }
+
+        function renderArticles(articles) {
+            const container = document.getElementById("articlesContainer");
+            container.innerHTML = "";
+
+            if (articles.length === 0) {
+                container.innerHTML = "<p>Henüz makale bulunmamaktadır.</p>";
+                return;
+            }
+
+            articles.forEach(article => {
+                const card = document.createElement("div");
+                card.className = "article-card";
+                card.innerHTML = `
+          <h3>${article.title}</h3>
+          <p><strong>Kategori:</strong> ${article.category}</p>
+          <p>${article.content.slice(0, 100)}...</p>
+          <div class="button-group">
+            <button class="edit-btn">Düzenle</button>
+            <button class="delete-btn">Sil</button>
+          </div>
+        `;
+
+                const editBtn = card.querySelector(".edit-btn");
+                editBtn.onclick = () => {
+                    const articleData = {
+                        id: article._id,
+                        title: article.title,
+                        content: article.content,
+                        category: article.category
+                    };
+                    localStorage.setItem("editArticle", JSON.stringify(articleData));
+                    window.location.href = "admin-update-article.html";
+                };
+
+                const deleteBtn = card.querySelector(".delete-btn");
+                deleteBtn.onclick = () => deleteArticle(article._id);
+
+                container.appendChild(card);
+            });
+        }
+
+        async function deleteArticle(id) {
+            if (!confirm("Bu makaleyi silmek istediğinize emin misiniz?")) return;
+
+            try {
+                const res = await fetch(`http://localhost:5000/api/articles/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                if (res.ok) {
+                    alert("Makale silindi.");
+                    fetchAllArticles(); // Listeyi yenile
+                } else {
+                    const data = await res.json();
+                    alert("Silme başarısız: " + (data.message || "Bilinmeyen hata"));
+                }
+            } catch (err) {
+                console.error("Silme hatası:", err);
+                alert("Sunucu hatası.");
+            }
+        }
+
+        fetchAllArticles();
+    </script>
+</body>
+
+</html>

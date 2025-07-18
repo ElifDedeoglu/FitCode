@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitCode</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: rgba(250, 241, 227, 255);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      background-image: url('arkaplan.jpg');
+      background-size: 85% auto;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+    }
+
+    .overlay {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      width: 100%;
+      padding: 60px;
+      color: white;
+      font-size: 4em;
+      font-weight: bold;
+      text-shadow: 2px 2px 10px #000;
+    }
+
+    .logo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200px;
+      height: auto;
+      opacity: 0.7;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .sidebar {
+      width: 25%;
+      padding: 20px;
+      background-color: #ffffffdd;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      position: relative;
+    }
+
+    .main-content {
+      width: 70%;
+      padding: 20px;
+      background-color: #ffffffdd;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    h2,
+    h3 {
+      color: #2e8b57;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      background-color: #2e8b57;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      background-color: #246b45;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .link a {
+      color: #2e8b57;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+
+    .card {
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
+
+    .admin-section {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 2px dashed #2e8b57;
+    }
+
+    .admin-button {
+      background-color: #d9534f;
+    }
+
+    .admin-button:hover {
+      background-color: #c9302c;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .admin-login-form {
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .admin-login-form input {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        font-size: 2.5em;
+        padding: 40px 20px;
+      }
+
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .sidebar,
+      .main-content {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      .logo {
+        width: 150px;
+      }
+
+      .card {
+        padding: 15px;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      input[type="password"] {
+        width: 100%;
+        font-size: 16px;
+      }
+
+      button {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <img src="logo1.jpg" alt="Logo" class="logo">
+
+  <div class="overlay">
+    <header>FitCode</header>
+
+    <div class="container">
+      <div class="sidebar">
+        <h3>Hoşgeldiniz, <span id="user-name"></span></h3>
+        <button onclick="window.location.href='profile.html'">Profil Bilgileri</button>
+        <button onclick="window.location.href='articles.html'">Popüler Makaleler</button>
+        <button onclick="window.location.href='water-tracking.html'">Su Takibi</button>
+        <button onclick="window.location.href='reports.html'">Günlük/Haftalık Raporlar</button>
+        <button id="adminLoginBtn" onclick="showAdminLogin()">Admin Girişi</button>
+
+        <div id="adminLoginForm" class="admin-login-form hidden">
+          <h3>Yönetici Girişi</h3>
+          <input type="text" id="adminUsername" placeholder="Kullanıcı Adı">
+          <input type="password" id="adminPassword" placeholder="Şifre">
+          <button onclick="checkAdminCredentials()">Giriş Yap</button>
+        </div>
+
+        <div id="adminPanel" class="admin-section hidden">
+          <h3>Admin Paneli</h3>
+          <button class="admin-button" onclick="window.location.href='admin-add-article.html'">Makale Ekle</button>
+          <button class="admin-button" onclick="window.location.href='admin-edit-article.html'">Makale Düzenle</button>
+          <button onclick="logoutAdmin()">Admin Çıkışı</button>
+        </div>
+
+        <button onclick="window.location.href='logout.html'">Çıkış Yap</button>
+      </div>
+
+      <div class="main-content">
+        <div class="card">
+          <h3>Günlük Kalori Hedefiniz</h3>
+          <p id="calorie-goal">Loading...</p>
+        </div>
+
+        <div class="card">
+          <h3>Son Eklenen Makale</h3>
+          <p><a href="https://bilimgenc.tubitak.gov.tr/makale/saglikli-bir-beslenme-icin-farkinda-olarak-yemek-yiyin"
+              target="_blank" style="color: #2e8b57; text-decoration: none;">Sağlıklı Bir Beslenme İçin Farkında Olarak
+              Yemek Yiyin</a></p>
+        </div>
+
+        <div class="card">
+          <h3>Besin Arama</h3>
+          <input type="text" placeholder="Besin adı arayın..." id="food-search">
+          <button onclick="searchFood()">Besin Ara</button>
+        </div>
+
+        <div class="card" id="food-panel" style="display: none;">
+          <h3>Besin Bilgileri</h3>
+          <p id="food-result"></p>
+          <input type="text" id="foodName" placeholder="Besin Adı">
+          <input type="number" id="calorieValue" placeholder="Kalori (kcal)">
+          <button onclick="saveFood()">Kaydet / Güncelle</button>
+          <button onclick="deleteFood()" style="background-color:#d9534f;">Sil</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÖN KISIM AYNEN KORUNUYOR (HTML, CSS) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const token = localStorage.getItem("token");
+      const user = token ? parseJwt(token) : null;
+
+      if (user) {
+        document.getElementById("user-name").textContent = user.email?.split("@")[0] || "Kullanıcı";
+
+        try {
+          const response = await fetch("http://localhost:5000/api/profile", {
+            method: "GET",
+            headers: {
+              "Authorization": `Bearer ${token}`
+            }
+          });
+
+          const data = await response.json();
+
+          if (response.ok && data.calories) {
+            document.getElementById("calorie-goal").textContent = `Günlük kalori hedefiniz: ${Math.round(data.calories)} kcal`;
+          } else {
+            document.getElementById("calorie-goal").textContent = "Günlük kalori hedefiniz: Tanımsız kcal";
+          }
+
+          if (user.isAdmin) {
+            document.getElementById("adminLoginBtn").classList.add("hidden");
+            document.getElementById("adminPanel").classList.remove("hidden");
+          }
+        } catch (err) {
+          console.error("Profil verisi alınamadı:", err);
+          document.getElementById("calorie-goal").textContent = "Kalori verisi alınamadı.";
+        }
+      }
+    });
+
+
+    function parseJwt(token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        return JSON.parse(decodeURIComponent(escape(atob(base64))));
+      } catch (e) {
+        console.error("Token parse hatası:", e);
+        return null;
+      }
+    }
+
+    function showAdminLogin() {
+      document.getElementById("adminLoginForm").classList.toggle("hidden");
+    }
+
+    async function checkAdminCredentials() {
+      const email = document.getElementById("adminUsername").value;
+      const password = document.getElementById("adminPassword").value;
+
+      try {
+        const response = await fetch("http://localhost:5000/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem("token", data.token);
+          const user = parseJwt(data.token);
+
+          if (user.isAdmin) {
+            alert("Admin paneline hoşgeldiniz!");
+            location.reload();
+          } else {
+            alert("Giriş başarılı ama admin yetkiniz yok.");
+          }
+        } else {
+          alert(data.mesaj || "Giriş başarısız.");
+        }
+      } catch (err) {
+        alert("Sunucu hatası: " + err.message);
+      }
+    }
+
+    function logoutAdmin() {
+      localStorage.removeItem("token");
+      location.reload();
+    }
+
+    async function searchFood() {
+      const foodQuery = document.getElementById('food-search').value.trim().toLowerCase();
+      const token = localStorage.getItem("token");
+
+      try {
+        const res = await fetch(`http://localhost:5000/api/foods/search?name=${encodeURIComponent(foodQuery)}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        const panel = document.getElementById('food-panel');
+        panel.style.display = 'block';
+
+        if (res.ok) {
+          const data = await res.json();
+
+          if (Array.isArray(data) && data.length > 0) {
+            const food = data[0]; // ilk besin bilgisi
+
+            document.getElementById('food-result').textContent = `"${food.name}" için kalori bilgisi: ${food.calories} kcal`;
+            document.getElementById('foodName').value = food.name;
+            document.getElementById('calorieValue').value = food.calories;
+            panel.setAttribute("data-id", food._id);
+          } else {
+            // Besin bulunamadı
+            document.getElementById('food-result').textContent = `"${foodQuery}" kaydı bulunamadı. Yeni besin ekleyebilirsiniz.`;
+            document.getElementById('foodName').value = foodQuery;
+            document.getElementById('calorieValue').value = '';
+            panel.removeAttribute("data-id");
+          }
+        } else {
+          document.getElementById('food-result').textContent = "Sunucudan geçerli yanıt alınamadı.";
+        }
+      } catch (err) {
+        alert("Sunucu hatası: " + err.message);
+      }
+    }
+
+
+    async function saveFood() {
+      const name = document.getElementById('foodName').value.trim().toLowerCase();
+      const calories = document.getElementById('calorieValue').value;
+      const foodId = document.getElementById('food-panel').getAttribute("data-id");
+      const token = localStorage.getItem("token");
+
+      if (!name || !calories) {
+        alert("Lütfen tüm alanları doldurun.");
+        return;
+      }
+
+      const payload = { name, calories: parseInt(calories) };
+
+      try {
+        const res = await fetch(
+          foodId
+            ? `http://localhost:5000/api/foods/${foodId}`
+            : "http://localhost:5000/api/foods",
+          {
+            method: foodId ? "PUT" : "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+          }
+        );
+
+        const data = await res.json();
+
+        if (res.ok) {
+          alert(`"${data.name}" başarıyla ${foodId ? "güncellendi" : "kaydedildi"}!`);
+          searchFood(); // yeniden göster
+        } else {
+          alert(data.message || "Bir hata oluştu.");
+        }
+      } catch (err) {
+        alert("Sunucu hatası: " + err.message);
+      }
+    }
+
+    async function deleteFood() {
+      const foodId = document.getElementById('food-panel').getAttribute("data-id");
+      const name = document.getElementById('foodName').value.trim().toLowerCase();
+      const token = localStorage.getItem("token");
+
+      if (!foodId) {
+        alert("Silinecek bir kayıt seçilmedi.");
+        return;
+      }
+
+      if (!confirm(`"${name}" besinini silmek istediğinize emin misiniz?`)) return;
+
+      try {
+        const res = await fetch(`http://localhost:5000/api/foods/${foodId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          alert(data.message);
+          document.getElementById('food-result').textContent = "";
+          document.getElementById('foodName').value = '';
+          document.getElementById('calorieValue').value = '';
+          document.getElementById('food-panel').style.display = 'none';
+        } else {
+          alert(data.message || "Silme işlemi başarısız.");
+        }
+      } catch (err) {
+        alert("Sunucu hatası: " + err.message);
+      }
+    }
+  </script>
+
+
+
+</body>
+
+</html>

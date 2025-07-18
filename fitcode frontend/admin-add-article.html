@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FitCode - Makale Ekle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            background: #f5f5f5;
+            font-family: "Poppins", sans-serif;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2e8b57;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 15px;
+            display: block;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        textarea {
+            min-height: 250px;
+        }
+
+        #imagePreview {
+            max-width: 100%;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .save-btn {
+            background-color: #2e8b57;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            background-color: #e53935;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Yeni Makale Ekle</h1>
+        <form id="articleForm">
+            <label for="articleTitle">Makale Başlığı</label>
+            <input type="text" id="articleTitle" required />
+
+            <label for="articleCategory">Kategori</label>
+            <select id="articleCategory" required>
+                <option value="">Seçiniz</option>
+                <option value="makale">Makale</option>
+                <option value="öğün">Öğün Önerisi</option>
+                <option value="yazı">Yararlı Yazı</option>
+            </select>
+
+            <label for="articleContent">İçerik</label>
+            <textarea id="articleContent" required></textarea>
+
+            <label for="articleImage">Görsel URL</label>
+            <input type="text" id="articleImage" />
+            <img id="imagePreview" alt="Önizleme" />
+
+            <div class="button-group">
+                <button type="button" class="cancel-btn" onclick="window.location.href='articles.html'">İptal</button>
+                <button type="submit" class="save-btn">Makaleyi Kaydet</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('articleForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const token = localStorage.getItem("token");
+            if (!token) {
+                alert("Yetkisiz işlem! Lütfen önce giriş yapın.");
+                return;
+            }
+
+            const newArticle = {
+                title: document.getElementById('articleTitle').value,
+                category: document.getElementById('articleCategory').value,
+                content: document.getElementById('articleContent').value,
+                image: document.getElementById('articleImage').value || 'default-article.jpg',
+                date: new Date().toLocaleDateString('tr-TR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }),
+                author: 'Admin'
+            };
+
+            if (!newArticle.category) {
+                alert("Lütfen bir kategori seçin.");
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:5000/api/articles", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    },
+                    body: JSON.stringify(newArticle)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert("Makale başarıyla eklendi!");
+                    window.location.href = "articles.html";
+                } else {
+                    alert("Hata: " + (data.message || "Makale eklenemedi."));
+                }
+            } catch (error) {
+                console.error("İstek hatası:", error);
+                alert("Sunucuya bağlanılamadı.");
+            }
+        });
+
+        document.getElementById('articleImage').addEventListener('input', function () {
+            const preview = document.getElementById('imagePreview');
+            if (this.value && this.value.startsWith("http")) {
+                preview.src = this.value;
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>

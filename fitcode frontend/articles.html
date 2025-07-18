@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitCode - Popüler Makaleler</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #d0f0c0, #f4fdf4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      background-color: #2e8b57;
+      width: 100%;
+      padding: 40px;
+      color: white;
+      font-size: 2.5em;
+      font-weight: bold;
+      text-shadow: 1px 1px 5px #000;
+      position: relative;
+    }
+
+    header img {
+      position: absolute;
+      top: 0%;
+      left: 0px;
+      width: 142px;
+      height: auto;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      padding: 20px;
+      background-color: #ffffffdd;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    h2 {
+      color: #2e8b57;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .article {
+      background-color: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    .article h3 {
+      color: #2e8b57;
+    }
+
+    .article p {
+      font-size: 16px;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .link a {
+      color: #2e8b57;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+
+    .meal-button {
+      display: block;
+      margin: 20px auto 0 auto;
+      padding: 12px 24px;
+      background-color: #2e8b57;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .meal-button:hover {
+      background-color: #246b45;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <img src="logo1.jpg" alt="FitCode Logo">
+    FitCode - Popüler Makaleler
+  </header>
+
+  <div class="container">
+    <h2>Popüler Makaleler</h2>
+
+    <!-- Sabit makaleler -->
+    <div class="article">
+      <h3><a href="https://bilimgenc.tubitak.gov.tr/makale/saglikli-bir-beslenme-icin-farkinda-olarak-yemek-yiyin"
+          target="_blank">Sağlıklı Bir Beslenme İçin Farkında Olarak Yemek Yiyin</a></h3>
+      <p>Yeme farkındalığına sahip olmak için dikkat etmemiz gereken temel prensipler hakkında bilgi edinin.</p>
+    </div>
+    <div class="article">
+      <h3><a href="https://bilimgenc.tubitak.gov.tr/makale/neden-spor-yapmaliyim" target="_blank">Neden Spor
+          Yapmalıyım?</a></h3>
+      <p>Fiziksel aktivitenin kalp sağlığını korumadaki, kilo dengesini sağlamadaki ve diğer sağlık faydalarındaki
+        rolünü keşfedin.</p>
+    </div>
+
+    <!-- Dinamik makaleler buraya gelecek -->
+    <div id="dynamicArticles"></div>
+
+    <!-- Genel butonlar -->
+    <button class="meal-button" onclick="window.location.href='meal-suggestions.html'">Öğün Önerileri</button>
+    <button class="meal-button" onclick="window.location.href='useful-tips.html'">Yararlı Yazılar</button>
+
+    <!-- Admin paneli (gizli olacak) -->
+    <h2 style="margin-top: 40px;" class="admin-only">Admin Paneli (Elif DEDEOĞLU)</h2>
+    <button class="meal-button admin-only" onclick="window.location.href='admin-add-article.html'">MAKALE EKLEME (Elif
+      DEDEOĞLU)</button>
+    <button class="meal-button admin-only" onclick="window.location.href='admin-edit-article.html'">MAKALE DÜZENLEME
+      (Elif DEDEOĞLU)</button>
+
+    <div class="link">
+      <a href="dashboard.html">Geri Dön</a>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    document.addEventListener("DOMContentLoaded", async function () {
+      const articlesContainer = document.getElementById("dynamicArticles");
+
+      try {
+        const response = await fetch("http://localhost:5000/api/articles/makale");
+        const articles = await response.json();
+
+        articles.forEach(article => {
+          const articleDiv = document.createElement("div");
+          articleDiv.classList.add("article");
+          articleDiv.innerHTML = `
+          <h3>${article.title}</h3>
+          <p>${article.content}</p>
+          <p><em>Kategori: ${article.category} | Yazar: ${article.author} | Tarih: ${article.date}</em></p>
+          ${article.image ? `<img src="${article.image}" alt="${article.title}" style="max-width:100%;margin-top:10px;border-radius:8px;">` : ''}
+        `;
+          articlesContainer.appendChild(articleDiv);
+        });
+      } catch (error) {
+        console.error("Makale çekme hatası:", error);
+      }
+
+      // Admin kontrolü
+      const isAdmin = localStorage.getItem("isAdmin");
+      if (isAdmin !== "true") {
+        const adminElements = document.querySelectorAll(".admin-only");
+        adminElements.forEach(el => el.style.display = "none");
+      }
+    });
+  </script>
+
+</body>
+
+</html>

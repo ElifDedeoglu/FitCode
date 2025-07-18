@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitCode - Raporlar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #d0f0c0, #f4fdf4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      position: relative;
+      padding-bottom: 30px;
+    }
+
+    header {
+      text-align: center;
+      background-color: #2e8b57;
+      width: 100%;
+      padding: 40px 20px;
+      color: white;
+      font-size: 2.5em;
+      font-weight: bold;
+      text-shadow: 1px 1px 5px #000;
+      position: relative;
+    }
+
+    header img {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 142px;
+      height: auto;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      padding: 20px;
+      background-color: #ffffffdd;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      margin-top: 20px;
+      z-index: 1;
+    }
+
+    h2 {
+      color: #2e8b57;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .report-card {
+      background-color: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    .report-card h3 {
+      color: #2e8b57;
+    }
+
+    .report-card input {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .report-card button {
+      background-color: #2e8b57;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      margin-top: 5px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .report-card button:hover {
+      background-color: #246b45;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .link a {
+      color: #2e8b57;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <img src="logo1.jpg" alt="FitCode Logo">
+    FitCode - Raporlar
+  </header>
+
+  <div class="container">
+    <h2>Raporlar</h2>
+
+    <div class="report-card">
+      <h3>Bugün İçilen Su Miktarı</h3>
+      <p id="water-intake">Bugün içtiğiniz su miktarı: 0 ml</p>
+      <p id="water-recommendation">Günlük önerilen su miktarı: Hesaplanıyor...</p>
+    </div>
+
+    <div class="report-card">
+      <h3>Günlük Kalori Takibi</h3>
+      <input type="text" id="foodName" placeholder="Besin adı">
+      <input type="number" id="foodCalories" placeholder="Kalori (kcal)">
+      <button onclick="addDailyFood()">Ekle</button>
+      <p id="totalCalories">Toplam tüketilen kalori: 0 kcal</p>
+      <p id="calorieFeedback" style="font-weight: bold;"></p>
+    </div>
+
+    <div class="link">
+      <a href="dashboard.html">Geri Dön</a>
+    </div>
+  </div>
+
+  <script>
+    let userCalorieGoal = 2000;
+    let userId = null;
+
+    function getTodayInTurkey() {
+      const now = new Date();
+      const turkiyeTime = new Date(now.getTime() + (3 * 60 * 60 * 1000)); // UTC+3
+      return turkiyeTime.toISOString().split("T")[0];
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Giriş yapmanız gerekiyor.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      // 🔎 Kullanıcı ID ve Kalori Hedefini çekiyoruz
+      try {
+        const res = await fetch("http://localhost:5000/api/profile", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        userId = data._id;
+        userCalorieGoal = Math.round(data.calories || 2000);
+        updateCalorieUI();
+      } catch (err) {
+        console.error("Kullanıcı bilgisi alınamadı:", err);
+      }
+
+      fetchWaterToday();
+      calculateWaterRecommendation();
+    });
+
+    document.getElementById("foodName").addEventListener("blur", async () => {
+      const name = document.getElementById("foodName").value.trim().toLowerCase();
+      const token = localStorage.getItem("token");
+
+      if (!name || !token) return;
+
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/foods/search?name=${encodeURIComponent(name)}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const result = await response.json();
+
+        if (response.ok && result.length > 0) {
+          document.getElementById("foodCalories").value = result[0].calories;
+        } else {
+          document.getElementById("foodCalories").value = "";
+          console.log("Besin bulunamadı.");
+        }
+      } catch (err) {
+        console.error("Besin sorgulama hatası:", err);
+      }
+    });
+
+    async function fetchWaterToday() {
+      const token = localStorage.getItem("token");
+      try {
+        const response = await fetch("http://localhost:5000/api/water/today", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          document.getElementById("water-intake").textContent = `Bugün içtiğiniz su miktarı: ${data.total} ml`;
+        } else {
+          document.getElementById("water-intake").textContent = `Su miktarı alınamadı: ${data.message}`;
+        }
+      } catch (error) {
+        console.error("Sunucu hatası:", error);
+        document.getElementById("water-intake").textContent = "Veri alınamadı.";
+      }
+    }
+
+    function calculateWaterRecommendation() {
+      const recommended = 70 * 35;
+      document.getElementById("water-recommendation").textContent = `Günlük önerilen su miktarı: yaklaşık ${recommended} ml`;
+    }
+
+    function addDailyFood() {
+      const name = document.getElementById("foodName").value.trim();
+      const calories = parseInt(document.getElementById("foodCalories").value);
+
+      if (!name || isNaN(calories)) {
+        alert("Lütfen tüm alanları doldurun.");
+        return;
+      }
+
+      const today = getTodayInTurkey();
+      const storageKey = `dailyFoods_${userId}`;
+      let dailyFoods = JSON.parse(localStorage.getItem(storageKey)) || {};
+      if (!dailyFoods[today]) dailyFoods[today] = [];
+
+      dailyFoods[today].push({ name, calories });
+      localStorage.setItem(storageKey, JSON.stringify(dailyFoods));
+
+      document.getElementById("foodName").value = "";
+      document.getElementById("foodCalories").value = "";
+
+      updateCalorieUI();
+    }
+
+    function updateCalorieUI() {
+      if (!userId) return;
+      const today = getTodayInTurkey();
+      const storageKey = `dailyFoods_${userId}`;
+      let dailyFoods = JSON.parse(localStorage.getItem(storageKey)) || {};
+      let foodsToday = dailyFoods[today] || [];
+
+      let total = foodsToday.reduce((sum, food) => sum + food.calories, 0);
+      document.getElementById("totalCalories").textContent = `Toplam tüketilen kalori: ${total} kcal`;
+
+      let feedback = "";
+      if (total > userCalorieGoal) {
+        feedback = `⚠️ Günlük kalori hedefinizi aştınız! (${userCalorieGoal} kcal)`;
+        document.getElementById("calorieFeedback").style.color = "red";
+      } else {
+        feedback = `✅ Kalori hedefiniz içinde kaldınız.`;
+        document.getElementById("calorieFeedback").style.color = "green";
+      }
+
+      document.getElementById("calorieFeedback").textContent = feedback;
+    }
+  </script>
+
+</body>
+
+</html>

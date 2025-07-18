@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitCode - Çıkış Yapıldı</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #d0f0c0, #f4fdf4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            background-color: #2e8b57;
+            width: 100%;
+            padding: 40px;
+            color: white;
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 1px 1px 5px #000;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #ffffffdd;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .message {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .link {
+            text-align: center;
+        }
+
+        .link a {
+            color: #2e8b57;
+            text-decoration: none;
+        }
+
+        .link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <header>FitCode - Çıkış Yapıldı</header>
+    <div class="container">
+        <div class="message">
+            <p>Çıkış yapıldı. Yine bekleriz!</p>
+        </div>
+        <div class="link">
+            <a href="index.html">Ana Sayfaya Dön</a>
+        </div>
+    </div>
+
+    <script>
+        fetch("http://localhost:5000/api/auth/logout", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        })
+            .then(res => res.json())
+            .then(data => console.log(data.mesaj))
+            .catch(err => console.error("Çıkış hatası:", err));
+
+    </script>
+</body>
+
+</html>
