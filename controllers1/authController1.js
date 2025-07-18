@@ -1,89 +1,104 @@
-const bcrypt = require("bcrypt");
+ï»¿const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models1/User1");
 
-// Kayıt işlemi
+// âœ… KayÄ±t iÅŸlemi
 const registerUser = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password, isAdmin } = req.body;
 
-        // 1. Kullanıcı daha önce kayıt olmuş mu kontrol et
+        // 1. AynÄ± e-posta ile kayÄ±tlÄ± kullanÄ±cÄ± var mÄ±?
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ mesaj: "Bu e-posta zaten kayıtlı" });
+            return res.status(400).json({ mesaj: "Bu e-posta zaten kayÄ±tlÄ±." });
         }
 
-        // 2. Şifreyi hashle
+        // 2. Åifreyi hashle
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // 3. Yeni kullanıcıyı oluştur
+        // 3. Yeni kullanÄ±cÄ± oluÅŸtur
         const newUser = new User({
             username,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            isAdmin: isAdmin || false // VarsayÄ±lan olarak admin deÄŸil
         });
 
         // 4. Kaydet
         await newUser.save();
 
-        // 5. JWT Token oluştur
-        console.log("JWT_SECRET:", process.env.JWT_SECRET); // kontrol için
+        // 5. JWT Token oluÅŸtur
         const token = jwt.sign(
-            { id: newUser._id },
+            {
+                id: newUser._id,
+                isAdmin: newUser.isAdmin
+            },
             process.env.JWT_SECRET,
             { expiresIn: "2h" }
         );
 
-        // 6. Başarılı yanıt
+        // 6. YanÄ±t dÃ¶ndÃ¼r
         res.status(201).json({
-            mesaj: "Kayıt başarılı",
-            token: token
+            mesaj: "KayÄ±t baÅŸarÄ±lÄ±.",
+            token
         });
 
     } catch (err) {
         res.status(500).json({
-            mesaj: "Sunucu hatası",
+            mesaj: "Sunucu hatasÄ±",
             hata: err.message
         });
     }
 };
 
-// Giriş işlemi
+// âœ… GiriÅŸ iÅŸlemi
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Kullanıcıyı bul
+        // 1. KullanÄ±cÄ±yÄ± bul
         const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ mesaj: "Kullanıcı bulunamadı" });
+        if (!user) return res.status(400).json({ mesaj: "KullanÄ±cÄ± bulunamadÄ±." });
 
-        // Şifreyi karşılaştır
+        // 2. Åifreyi kontrol et
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ mesaj: "Şifre hatalı" });
+        if (!isMatch) return res.status(400).json({ mesaj: "Åifre hatalÄ±." });
 
-        // JWT token oluştur
+        // 3. JWT Token oluÅŸtur
         const token = jwt.sign(
-            { id: user._id },
+            {
+                id: user._id,
+                isAdmin: user.isAdmin
+            },
             process.env.JWT_SECRET,
             { expiresIn: "2h" }
         );
 
-        res.status(200).json({ mesaj: "Giriş başarılı", token });
+        // 4. YanÄ±t dÃ¶ndÃ¼r
+        res.status(200).json({
+            mesaj: "GiriÅŸ baÅŸarÄ±lÄ±.",
+            token
+        });
 
     } catch (err) {
-        res.status(500).json({ mesaj: "Sunucu hatası", hata: err.message });
+        res.status(500).json({
+            mesaj: "Sunucu hatasÄ±",
+            hata: err.message
+        });
     }
 };
 
-// Çıkış işlemi (opsiyonel)
+// âœ… Ã‡Ä±kÄ±ÅŸ iÅŸlemi (frontend taraflÄ±dÄ±r)
 const logoutUser = async (req, res) => {
     try {
-        // Logout işleminde tarayıcıdaki token silinir, backend’de işlem gerekmez ama token geçersiz kılınmak istenirse yapılabilir
-        res.status(200).json({ mesaj: "Çıkış başarılı, token tarayıcıdan silinmeli." });
+        res.status(200).json({ mesaj: "Ã‡Ä±kÄ±ÅŸ baÅŸarÄ±lÄ±, token tarayÄ±cÄ±dan silinmeli." });
     } catch (err) {
-        res.status(500).json({ mesaj: "Sunucu hatası", hata: err.message });
+        res.status(500).json({ mesaj: "Sunucu hatasÄ±", hata: err.message });
     }
 };
 
-module.exports = { registerUser, loginUser, logoutUser };
-
+module.exports = {
+    registerUser,
+    loginUser,
+    logoutUser
+};
