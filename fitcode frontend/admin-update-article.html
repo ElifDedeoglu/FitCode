@@ -103,7 +103,7 @@
             };
 
             try {
-                const res = await fetch(`http://localhost:5000/api/articles/${articleData.id}`, {
+                const res = await fetch(`https://fitcode-e22p.onrender.com/api/articles/${articleData.id}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -126,6 +126,7 @@
             }
         });
     </script>
+
 
 </body>
 

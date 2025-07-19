@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -69,26 +70,27 @@
             transition: background-color 0.3s ease;
         }
 
-            button:hover {
-                background-color: #246b45;
-                cursor: pointer;
-            }
+        button:hover {
+            background-color: #246b45;
+            cursor: pointer;
+        }
 
         .link {
             text-align: center;
             margin-top: 10px;
         }
 
-            .link a {
-                color: #2e8b57;
-                text-decoration: none;
-            }
+        .link a {
+            color: #2e8b57;
+            text-decoration: none;
+        }
 
-                .link a:hover {
-                    text-decoration: underline;
-                }
+        .link a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
+
 <body>
     <header>FitCode</header>
 
@@ -132,7 +134,7 @@
             try {
                 console.log("Gönderilen veri:", yeniKullanici); // DEBUG
 
-                const response = await fetch("http://localhost:5000/api/auth/register", {
+                const response = await fetch("https://fitcode-e22p.onrender.com/api/auth/register", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -148,14 +150,15 @@
                     alert("Kayıt başarılı! Yönlendiriliyorsunuz...");
                     window.location.href = "dashboard.html";
                 } else {
-                    alert(`Kayıt başarısız: ${data.mesaj || data.message}`);
+                    alert(`Kayıt başarısız: ${data.mesaj || data.message || "Bilinmeyen hata"}`);
                 }
             } catch (error) {
                 console.error("Hata:", error);
-                alert(`Sunucu hatası: ${error.message}`);
+                alert("Sunucu hatası: Lütfen daha sonra tekrar deneyin");
             }
         });
     </script>
 
 </body>
+
 </html>

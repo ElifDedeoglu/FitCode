@@ -156,7 +156,8 @@
       const articlesContainer = document.getElementById("dynamicArticles");
 
       try {
-        const response = await fetch("http://localhost:5000/api/articles/makale");
+        // Burası değişti: localhost yerine Render URL'si
+        const response = await fetch("https://fitcode-e22p.onrender.com/api/articles/makale");
         const articles = await response.json();
 
         articles.forEach(article => {
