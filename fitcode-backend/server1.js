@@ -49,7 +49,7 @@ app.get("/", (req, res) => {
     });
 });
 
-// 🌐 MongoDB bağlantısı
+// 🌐 MongoDB Atlas bağlantısı
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
