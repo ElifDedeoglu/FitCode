@@ -11,9 +11,14 @@ const app = express();
 // 🌐 Middleware'ler
 app.use(express.json());
 
-// ✅ CORS (Güncel ayar)
+// ✅ CORS (Tüm ortamlar için güncel)
 app.use(cors({
-    origin: ["http://127.0.0.1:5500", "http://localhost:5500"],
+    origin: [
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
+        "https://fitcode-e22p.onrender.com",
+        "https://fitcode.online"
+    ],
     credentials: true
 }));
 
