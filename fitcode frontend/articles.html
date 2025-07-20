@@ -156,8 +156,8 @@
       const articlesContainer = document.getElementById("dynamicArticles");
 
       try {
-        // Burası değişti: localhost yerine Render URL'si
-        const response = await fetch("https://fitcode-e22p.onrender.com/api/articles/makale");
+        // Güncel fetch adresi
+        const response = await fetch("https://fitcode.online/api/articles/makale");
         const articles = await response.json();
 
         articles.forEach(article => {
@@ -183,6 +183,7 @@
       }
     });
   </script>
+
 
 </body>
 
