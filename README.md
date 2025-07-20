@@ -5,7 +5,7 @@
 
 **Referans Uygulaması:** www.macfit.com 
 
-**Uygulama Adresi :** https://elif.fitcode.online
+**Uygulama Adresi :** https://www.fitcode.online
 
 **Grup Adı:** BioSisters
 
@@ -19,4 +19,6 @@
 
 **3. [Tuğba Durum Senaryoları](Tuğba_durum_senaryoları.pdf)**
 
-**4. [Front-End](https://elif.fitcode.online)** 
+**4. [Front-End](https://fitcode.online)** 
+
+**4. [Front-End](https://fitcode.online)** 
