@@ -71,7 +71,6 @@
 
     <h1>Tüm Makaleleri Düzenle</h1>
     <div id="articlesContainer">Yükleniyor...</div>
-
     <script>
         const token = localStorage.getItem("token");
 
@@ -84,7 +83,7 @@
             const container = document.getElementById("articlesContainer");
 
             try {
-                const response = await fetch("https://fitcode.online/api/articles/", {
+                const response = await fetch("https://api.fitcode.online/api/articles/", {
                     headers: {
                         "Authorization": `Bearer ${token}`
                     }
@@ -146,7 +145,7 @@
             if (!confirm("Bu makaleyi silmek istediğinize emin misiniz?")) return;
 
             try {
-                const res = await fetch(`https://fitcode.online/api/articles/${id}`, {
+                const res = await fetch(`https://api.fitcode.online/api/articles/${id}`, {
                     method: "DELETE",
                     headers: {
                         "Authorization": `Bearer ${token}`
@@ -168,6 +167,7 @@
 
         fetchAllArticles();
     </script>
+
 
 
 </body>

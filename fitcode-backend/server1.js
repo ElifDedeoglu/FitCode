@@ -17,7 +17,8 @@ app.use(cors({
         "http://127.0.0.1:5500",
         "http://localhost:5500",
         "https://fitcode-e22p.onrender.com",
-        "https://fitcode.online"
+        "https://fitcode.online",
+        "https://www.fitcode.online" // 🔹 GÜNCEL: GitHub Pages için HTTPS domaini eklendi
     ],
     credentials: true
 }));

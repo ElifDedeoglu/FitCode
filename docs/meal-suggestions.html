@@ -144,7 +144,7 @@
       const dynamicContainer = document.getElementById("dynamicArticles");
 
       try {
-        const response = await fetch("https://fitcode.online/api/articles/öğün");
+        const response = await fetch("https://api.fitcode.online/api/articles/öğün");
         const data = await response.json();
 
         if (response.ok) {
@@ -166,6 +166,7 @@
       }
     });
   </script>
+
 
 
 </body>

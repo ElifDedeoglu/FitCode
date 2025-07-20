@@ -148,7 +148,7 @@
 
         async function loadArticles() {
             try {
-                const response = await fetch("https://fitcode.online/api/articles", {
+                const response = await fetch("https://api.fitcode.online/api/articles", {
                     headers: {
                         "Authorization": "Bearer " + token
                     }
@@ -173,21 +173,21 @@
                 const card = document.createElement("div");
                 card.className = "article-card";
                 card.innerHTML = `
-                <img src="${article.image || 'default-article.jpg'}" class="article-image" alt="${article.title}">
-                <div class="article-content">
-                    <h3 class="article-title">${article.title}</h3>
-                    <p class="article-excerpt">${article.content.substring(0, 100)}...</p>
-                    <div class="article-meta">
-                        <span>${article.category}</span>
-                        <span>${article.date}</span>
-                    </div>
-                    ${isAdmin ? `
-                    <div class="admin-actions">
-                        <button class="edit-btn" onclick="editArticle('${article._id}')">Düzenle</button>
-                        <button class="delete-btn" onclick="deleteArticle('${article._id}')">Sil</button>
-                    </div>` : ""}
+            <img src="${article.image || 'default-article.jpg'}" class="article-image" alt="${article.title}">
+            <div class="article-content">
+                <h3 class="article-title">${article.title}</h3>
+                <p class="article-excerpt">${article.content.substring(0, 100)}...</p>
+                <div class="article-meta">
+                    <span>${article.category}</span>
+                    <span>${article.date}</span>
                 </div>
-            `;
+                ${isAdmin ? `
+                <div class="admin-actions">
+                    <button class="edit-btn" onclick="editArticle('${article._id}')">Düzenle</button>
+                    <button class="delete-btn" onclick="deleteArticle('${article._id}')">Sil</button>
+                </div>` : ""}
+            </div>
+        `;
                 grid.appendChild(card);
             });
         }
@@ -204,7 +204,7 @@
             if (!confirm("Bu makaleyi silmek istediğinize emin misiniz?")) return;
 
             try {
-                const response = await fetch(`https://fitcode.online/api/articles/${id}`, {
+                const response = await fetch(`https://api.fitcode.online/api/articles/${id}`, {
                     method: "DELETE",
                     headers: {
                         "Authorization": "Bearer " + token
@@ -225,6 +225,7 @@
             }
         }
     </script>
+
 
 </body>
 

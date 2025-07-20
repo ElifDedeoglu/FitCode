@@ -157,7 +157,7 @@
 
       try {
         // Güncel fetch adresi
-        const response = await fetch("https://fitcode.online/api/articles/makale");
+        const response = await fetch("https://api.fitcode.online/api/articles/makale");
         const articles = await response.json();
 
         articles.forEach(article => {
@@ -183,6 +183,7 @@
       }
     });
   </script>
+
 
 
 </body>

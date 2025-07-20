@@ -103,7 +103,7 @@
             };
 
             try {
-                const res = await fetch(`https://fitcode.online/api/articles/${articleData.id}`, {
+                const res = await fetch(`https://api.fitcode.online/api/articles/${articleData.id}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -126,7 +126,6 @@
             }
         });
     </script>
-
 
 
 </body>

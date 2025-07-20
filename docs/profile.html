@@ -215,7 +215,7 @@
 
     window.onload = async () => {
       try {
-        const response = await fetch("https://fitcode.online/api/profile", {
+        const response = await fetch("https://api.fitcode.online/api/profile", {
           method: "GET",
           headers: {
             "Authorization": "Bearer " + token
@@ -268,7 +268,7 @@
       }
 
       try {
-        const response = await fetch("https://fitcode.online/api/profile", {
+        const response = await fetch("https://api.fitcode.online/api/profile", {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -306,6 +306,7 @@
       }
     }
   </script>
+
 
 
 
